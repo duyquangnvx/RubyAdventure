@@ -27,11 +27,11 @@ public class Projectile : MonoBehaviour
         rb2d.AddForce(director * force);
     }
     
-    private void OnCollisionEnter2D(Collision2D other) {
-        Enemy enemy = other.collider.GetComponent<Enemy>(); 
+    private void OnTriggerEnter2D(Collider2D other) {
+        Enemy enemy = other.GetComponent<Enemy>(); 
         if (enemy != null) {
             enemy.Fix();
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
     }
 }
