@@ -59,6 +59,6 @@ sysinfo.txt
 crashlytics-build.properties
 
 *.meta
-Assets/Art/
+
 Assets/Audio/
 Assets/Demo/

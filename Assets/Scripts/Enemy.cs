@@ -12,23 +12,46 @@ public class Enemy : MonoBehaviour
     float movingTimer;
     public float movingTime = 1.5f;
 
+    Animator animator;
+
+    bool broken = true;
+
     // Start is called before the first frame update
     void Start()
     {   
         rb2d = GetComponent<Rigidbody2D>();
+        movingTimer = movingTime;
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!broken) {
+            return;
+        }
+
         movingTimer -= Time.deltaTime;
         if (movingTimer < 0) {
             direction *= -1;
             movingTimer = movingTime;
         }
+
+        if (vertical) {
+            animator.SetFloat("MoveX", 0);
+            animator.SetFloat("MoveY", direction);
+        }
+        else {
+            animator.SetFloat("MoveX", direction);
+            animator.SetFloat("MoveY", 0);
+        }
     }
 
     private void FixedUpdate() {
+        if (!broken) {
+            return;  
+        }
+
         Vector2 position = rb2d.position;
         if (vertical) {
             position.y += (speed * Time.deltaTime * direction);
@@ -44,5 +67,11 @@ public class Enemy : MonoBehaviour
         if (rubyController != null) {
             rubyController.ChangeHealth(-GameConfig.ENEMY_ATK);
         }
+    }
+
+    public void Fix() {
+        broken = false;
+        rb2d.simulated = false;
+        animator.SetTrigger("Fixed");
     }
 }
